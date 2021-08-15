@@ -6,8 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	// "github.com/go-playground/validator/v10"
-	// "honnef.co/go/tools/analysis/facts/nilness"
 )
 
 type userHandler struct {
@@ -49,5 +47,42 @@ func (h *userHandler) RegisterUser(c *gin.Context){
 
 	response := helper.APIResponse("Account has been registered", http.StatusOK, "Success", formatter)
 
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *userHandler) LoginUser(c *gin.Context) {
+	// User input data (email & password)
+	// Input catch by handler
+	// mapping from user input to struct input
+	// input struct passing service
+	// in service find with the help of repository user with email x
+	// matching password
+
+	var input user.LoginUserInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Login failed", http.StatusUnprocessableEntity, "Error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	loggedInUser, err := h.userService.LoginUser(input)
+
+	if err != nil {
+		errorMessage := gin.H{"error": err.Error()}
+
+		response := helper.APIResponse("Login failed", http.StatusBadRequest, "Error", errorMessage)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	formatter := user.FormatUser(loggedInUser, "tokentokentokentokentoken")
+
+	response := helper.APIResponse("Account has been successfully logged in", http.StatusOK, "Success", formatter)
+	
 	c.JSON(http.StatusOK, response)
 }

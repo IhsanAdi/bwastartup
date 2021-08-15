@@ -2,10 +2,7 @@ package helper
 
 import (
 	"github.com/go-playground/validator/v10"
-	// "golang.org/x/text/unicode/rangetable"
 )
-
-// import "golang.org/x/text/message"
 
 type Response struct{
 	Meta Meta `json:"meta"`
