@@ -6,7 +6,6 @@ import (
 	"bwastartup/auth"
 	"fmt"
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -51,10 +50,7 @@ func (h *userHandler) RegisterUser(c *gin.Context){
 	}
 
 	formatter := user.FormatUser(newUser, token)
-
-
 	response := helper.APIResponse("Account has been registered", http.StatusOK, "Success", formatter)
-
 	c.JSON(http.StatusOK, response)
 }
 
@@ -96,9 +92,7 @@ func (h *userHandler) LoginUser(c *gin.Context) {
 	}
 
 	formatter := user.FormatUser(loggedInUser, token)
-
 	response := helper.APIResponse("Account has been successfully logged in", http.StatusOK, "Success", formatter)
-	
 	c.JSON(http.StatusOK, response)
 }
 
@@ -140,7 +134,6 @@ func (h *userHandler) CheckEmailAvailability(c *gin.Context){
 
 	response := helper.APIResponse(metaMessage, http.StatusOK, "success", data)
 	c.JSON(http.StatusOK, response)
-
 }
 
 func (h *userHandler) AvatarUploadFile(c *gin.Context) {
@@ -159,8 +152,9 @@ func (h *userHandler) AvatarUploadFile(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
-	// should get JWT, but be patience :)
-	userID := 1
+	
+	currentUser := c.MustGet("currentUser").(user.User)
+	userID := currentUser.ID
 
 	path := fmt.Sprintf("images/%d-%s", userID, file.Filename)
 
@@ -184,6 +178,5 @@ func (h *userHandler) AvatarUploadFile(c *gin.Context) {
 
 	data := gin.H{"is_uploaded": true}
 	response := helper.APIResponse("Avatar successfully uploaded" ,http.StatusOK, "Success", data)
-		
 	c.JSON(http.StatusOK, response)
 }
