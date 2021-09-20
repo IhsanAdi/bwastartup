@@ -52,6 +52,8 @@ func main() {
 	// authMiddleware and authMiddleware() is different, first is passing function and second is passing return value of function
 
 	api.GET("/campaigns", campaignHandler.GetCampaigns)
+	api.GET("/campaign/:id", campaignHandler.GetCampaign)
+
 	router.Run(":8082")
 }
 
