@@ -56,8 +56,32 @@ func (h *transactionHandler) GetUserTransactions(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// parameter di uri
-// tangkap parameter mapping input struct
-// panggil service, input struct as parameter
-// service, berbekal campaign id bisa panggil repo
-// repo mencari data transaction suatu campaign 
+func (h *transactionHandler) CreateTransaction(c *gin.Context) {
+	var input transaction.CreateTransactionInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to create transaction", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	currentUser := c.MustGet("currentUser").(user.User)
+	input.User = currentUser
+
+	newTransaction, err := h.service.CreateTransaction(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to create transaction", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Create transaction", http.StatusOK, "success", transaction.FormatTransaction(newTransaction))
+		c.JSON(http.StatusOK, response)
+
+}
+
+// ada input dari user
+// handler tangkap input terus di-mapping ke input struct
+// panggil service buat transaksi, manggil sistem midtrans
+// panggil repository create new transaction data
