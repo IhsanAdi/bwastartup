@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gin-contrib/cors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
@@ -48,6 +49,7 @@ func main() {
 	transactionHandler := handler.NewTransactionHandler(transactionService)
 
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.Static("/images", "./images")  //server, local
 	api := router.Group("/api/v1")
 
