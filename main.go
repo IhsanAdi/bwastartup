@@ -57,6 +57,7 @@ func main() {
 	api.POST("/sessions", userHandler.LoginUser)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.AvatarUploadFile) //we use passing value because value return is function
+	api.GET("/users/fetch", authMiddleware(authService, userService), userHandler.FetchUser)
 	// authMiddleware and authMiddleware() is different, first is passing function and second is passing return value of function
 
 	api.GET("/campaigns", campaignHandler.GetCampaigns)
