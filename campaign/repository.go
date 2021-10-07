@@ -71,7 +71,7 @@ func (r *repository) Update(campaign Campaign) (Campaign, error){
 }
 
 func (r *repository) CreateImage(campaignImage CampaignImage) (CampaignImage, error){
-	err := r.db.Save(&campaignImage).Error
+	err := r.db.Create(&campaignImage).Error
 	
 	if err != nil {
 		return campaignImage, err

@@ -88,6 +88,12 @@ func FormatCampaignDetail(campaign Campaign) CampaignDetailFormatter {
 		campaignDetailFormatter.ImageURL = campaign.CampaignImages[0].FileName
 	}
 
+	for _, perk := range strings.Split(campaign.Perks, ",") {
+		perks = append(perks, strings.TrimSpace(perk))
+	}
+
+	campaignDetailFormatter.Perks = perks
+	
 	user := campaign.User
 
 	campaignUserFormatter := CampaignUserFormatter{}
@@ -95,12 +101,6 @@ func FormatCampaignDetail(campaign Campaign) CampaignDetailFormatter {
 	campaignUserFormatter.ImageURL = user.AvatarFileName
 
 	campaignDetailFormatter.User = campaignUserFormatter
-
-	for _, perk := range strings.Split(campaign.Perks, ",") {
-		perks = append(perks, strings.TrimSpace(perk))
-	}
-
-	campaignDetailFormatter.Perks = perks
 
 	images := []CampaignImageFormatter{}
 

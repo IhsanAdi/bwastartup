@@ -31,7 +31,7 @@ func (h *userHandler) RegisterUser(c *gin.Context){
 		errorMessage := gin.H{"errors": errors}
 
 		response := helper.APIResponse("Register account failed", http.StatusUnprocessableEntity, "Error", errorMessage)
-		c.JSON(http.StatusBadRequest, response)
+		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
 
@@ -87,7 +87,7 @@ func (h *userHandler) LoginUser(c *gin.Context) {
 	token, err := h.authService.GenerateToken(loggedInUser.ID)
 	if err != nil {
 		response := helper.APIResponse("Register account failed", http.StatusBadRequest, "Error", nil)
-		c.JSON(http.StatusUnprocessableEntity, response)
+		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
